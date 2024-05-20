@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 10:51:59 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:04:16 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,24 @@
 
 void    vita(t_philo *philas)
 {
+    int current_time;
+    int index;
+    
+    index = philas->index;
+    current_time = gettimeofday(NULL, NULL);
     while (is_alive(philas) && is_full(philas) && philas->meals < philas->init->n_eat)
     {
+        pthread_mutex_lock(&philas->init->forks[index - 1]);
+        printf("%d %d has taken a fork\n", current_time, index);
+        pthread_mutex_lock(&philas->init->forks[index]);
+        printf("%d %d has taken a fork\n", current_time, index);
+        /////////////////
         ft_eating(philas);
+        pthread_mutex_unlock(&philas->init->forks[index - 1]);
+        pthread_mutex_unlock(&philas->init->forks[index]);
+        philas->last_eated = gettimeofday(NULL, NULL);
         philas->meals++;
+        /////////////////
         ft_sleeping(philas);
         ft_thinking(philas);
     }
@@ -37,6 +51,9 @@ void    philo_init(t_init *pars)
         pthread_mutex_init(&pars->forks[i], NULL);
         (philosofers + i)->init = pars;
         (philosofers + i)->meals = 0;
+        if (pars->n_philo % 2 == 0)
+            usleep(1337);
+        philosofers->index = i;
         pthread_create(pars->philo + i, NULL, vita, philosofers);
         ++i;
     }

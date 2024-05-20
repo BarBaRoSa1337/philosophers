@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 10:52:53 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:03:31 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef struct s_init
 {
@@ -38,6 +39,7 @@ typedef struct s_philo
     pthread_mutex_t left_fork;
     pthread_mutex_t dead;
     t_init          *init;
+    int             index;
     int             last_eated;
     int             meals;
 }                   t_philo;
