@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/18 11:07:27 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 09:59:39 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,26 @@ int	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-int get_args(int ac, char **ar, t_init pars)
+int get_args(int ac, char **ar, t_init *pars)
 {
     int i;
 
     i = -1;
-    pars.n_eat = 0;
+    pars->n_eat = 0;
     while (++i < ac)
     {
         if (!ft_check(ar[i]) && ac != 1)
             return (0);
         else if (ac == 2)
-            pars.n_philo = ft_atoi(ar[i]);
+            pars->n_philo = ft_atoi(ar[i]);
         else if (ac == 3)
-            pars.tt_die = ft_atoi(ar[i]);
+            pars->tt_die = ft_atoi(ar[i]);
         else if (ac == 4)
-            pars.tt_eat = ft_atoi(ar[i]);
+            pars->tt_eat = ft_atoi(ar[i]);
         else if (ac == 5)
-            pars.tt_sleep = ft_atoi(ar[i]);
+            pars->tt_sleep = ft_atoi(ar[i]);
         else if (ac == 6)
-            pars.n_eat = ft_atoi(ar[i]);
+            pars->n_eat = ft_atoi(ar[i]);
     }
     return (1);
 }

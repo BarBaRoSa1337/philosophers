@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 09:17:20 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 10:01:44 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,29 @@ void    vita(t_philo *philas)
     }
 }
 
-void    philo(t_init pars)
+void    philo_init(t_init *pars)
 {
-    pthread_t *philas;
-    pthread_mutex_t fork;
-    int i;
+    t_philo *philosofers;
+    int     i;
 
     i = 0;
-    while (i < pars.n_philo)
+    philosofers = malloc(sizeof(t_philo) * pars->n_philo);
+    while (i < pars->n_philo)
     {
-        // pthread_mutex_init(philas[i]->forks, NULL);
-        pthread_create(&philas[i], NULL, &vita, NULL);
-        ++i;
+        (philosofers + i)->init = pars;
     }
+    
 }
 
 int main(int ac, char **ar)
 {
-    t_init  pars;
+    t_init  *pars;
 
+    pars = malloc(sizeof(t_init));
+    if (!pars)
+        return (NULL);
     if (ac < 5 || !get_args(ac, ar, pars))
         return (1);
-    philo(pars);
+    philo_init(pars);
     return (0);
 }
