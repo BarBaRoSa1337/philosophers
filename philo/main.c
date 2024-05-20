@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 10:18:58 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 10:51:59 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void    vita(t_philo *philas)
 {
-    while (is_alive(philas) && is_full(philas))
+    while (is_alive(philas) && is_full(philas) && philas->meals < philas->init->n_eat)
     {
         ft_eating(philas);
+        philas->meals++;
         ft_sleeping(philas);
         ft_thinking(philas);
     }
@@ -28,13 +29,14 @@ void    philo_init(t_init *pars)
     int     i;
 
     i = 0;
-    philosofers = malloc(sizeof(t_philo));
+    philosofers = malloc(sizeof(t_philo) * pars->n_philo);
     pars->forks = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
     pars->philo = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
     while (i < pars->n_philo)
     {
         pthread_mutex_init(&pars->forks[i], NULL);
         (philosofers + i)->init = pars;
+        (philosofers + i)->meals = 0;
         pthread_create(pars->philo + i, NULL, vita, philosofers);
         ++i;
     }
