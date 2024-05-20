@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 11:04:16 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:07:05 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void    philo_init(t_init *pars)
     while (i < pars->n_philo)
     {
         pthread_mutex_init(&pars->forks[i], NULL);
+        (philosofers + i)->last_eated = 0;
         (philosofers + i)->init = pars;
         (philosofers + i)->meals = 0;
         if (pars->n_philo % 2 == 0)
