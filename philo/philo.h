@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 09:59:54 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 10:14:58 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ typedef struct s_init
    int  tt_die;
    int  tt_eat;
    int  n_eat;
+   int  t_start;
    pthread_mutex_t  *forks;
+   pthread_t       *philo;
 }       t_init;
 
 typedef struct s_philo
 {
     pthread_mutex_t right_fork;
     pthread_mutex_t left_fork;
-    int             t_start;
-    int             phil_n;
     t_init          *init;
 }                   t_philo;
 

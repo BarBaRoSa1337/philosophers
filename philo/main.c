@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 10:01:44 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/20 10:18:58 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,16 @@ void    philo_init(t_init *pars)
     int     i;
 
     i = 0;
-    philosofers = malloc(sizeof(t_philo) * pars->n_philo);
+    philosofers = malloc(sizeof(t_philo));
+    pars->forks = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
+    pars->philo = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
     while (i < pars->n_philo)
     {
+        pthread_mutex_init(&pars->forks[i], NULL);
         (philosofers + i)->init = pars;
+        pthread_create(pars->philo + i, NULL, vita, philosofers);
+        ++i;
     }
-    
 }
 
 int main(int ac, char **ar)
