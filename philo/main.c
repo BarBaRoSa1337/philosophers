@@ -6,46 +6,71 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 11:07:05 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/21 10:43:18 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void    monitoring(t_philo *philas)
+{
+    int i;
+    int current_time;
+
+    while (1)
+    {
+        i = 0;
+        while (i < philas->init->n_philo)
+        {
+            if ((philas + i)->last_eated - current_time >= (philas + i)->init->tt_die)
+                exit(0);
+            ++i;
+        }
+    }
+}
+
 void    vita(t_philo *philas)
 {
     int current_time;
     int index;
-    
+
     index = philas->index;
     current_time = gettimeofday(NULL, NULL);
-    while (is_alive(philas) && is_full(philas) && philas->meals < philas->init->n_eat)
+    while (is_alive(philas) && philas->meals < philas->init->n_eat)
     {
-        pthread_mutex_lock(&philas->init->forks[index - 1]);
+        if (philas->index == 1)
+            pthread_mutex_lock(&philas->init->forks[philas->init->n_philo - 1]);
+        else
+            pthread_mutex_lock(&philas->init->forks[index - 1]);
         printf("%d %d has taken a fork\n", current_time, index);
         pthread_mutex_lock(&philas->init->forks[index]);
         printf("%d %d has taken a fork\n", current_time, index);
         /////////////////
         ft_eating(philas);
-        pthread_mutex_unlock(&philas->init->forks[index - 1]);
+        if (philas->index == 1)
+            pthread_mutex_unlock(&philas->init->forks[philas->init->n_philo - 1]);
+        else
+            pthread_mutex_unlock(&philas->init->forks[index - 1]);
         pthread_mutex_unlock(&philas->init->forks[index]);
         philas->last_eated = gettimeofday(NULL, NULL);
         philas->meals++;
         /////////////////
-        ft_sleeping(philas);
-        ft_thinking(philas);
+        ft_sleeping(philas, index);
+        ft_thinking(philas, index);
     }
 }
 
 void    philo_init(t_init *pars)
 {
-    t_philo *philosofers;
-    int     i;
+    pthread_t   monitor;
+    t_philo     *philosofers;
+    int         i;
 
     i = 0;
     philosofers = malloc(sizeof(t_philo) * pars->n_philo);
     pars->forks = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
     pars->philo = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
+    pars->philas = philosofers;
     while (i < pars->n_philo)
     {
         pthread_mutex_init(&pars->forks[i], NULL);
@@ -55,9 +80,10 @@ void    philo_init(t_init *pars)
         if (pars->n_philo % 2 == 0)
             usleep(1337);
         philosofers->index = i;
-        pthread_create(pars->philo + i, NULL, vita, philosofers);
+        pthread_create(pars->philo + i, NULL, vita, philosofers + i);
         ++i;
     }
+    pthread_create(&monitor, NULL, monitoring, philosofers);
 }
 
 int main(int ac, char **ar)

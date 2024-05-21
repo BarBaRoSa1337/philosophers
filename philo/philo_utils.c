@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 09:59:39 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/21 10:39:33 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int get_args(int ac, char **ar, t_init *pars)
     {
         if (!ft_check(ar[i]) && ac != 1)
             return (0);
-        else if (ac == 2)
+        else if (ac == 2 && pars->n_philo <= 200)
             pars->n_philo = ft_atoi(ar[i]);
         else if (ac == 3)
             pars->tt_die = ft_atoi(ar[i]);
@@ -64,20 +64,18 @@ int get_args(int ac, char **ar, t_init *pars)
     return (1);
 }
 
-void    ft_thinking(t_philo *philas)
+void    ft_thinking(t_philo *philas, int index)
 {
     int current_time;
-    int philo_number;
     
-    printf("%d %d is thinking\n", current_time, philo_number);
+    printf("%d %d is thinking\n", current_time, index);
     usleep(500000);
 }
 
-void    ft_sleeping(t_philo *philas)
-{
+void    ft_sleeping(t_philo *philas, int index)
+{   
     int current_time;
-    int philo_number;
 
-    printf("%d %d is sleeping\n", current_time, philo_number);
+    printf("%d %d is sleeping\n", current_time, index);
     usleep(500000);
 }

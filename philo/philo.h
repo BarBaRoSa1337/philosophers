@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/20 11:03:31 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/21 10:40:13 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <pthread.h>
 #include <sys/time.h>
 
+typedef struct s_philo t_philo;
+
 typedef struct s_init
 {
    int  tt_sleep;
@@ -31,6 +33,7 @@ typedef struct s_init
    pthread_mutex_t  dead;
    pthread_mutex_t  *forks;
    pthread_t        *philo;
+   t_philo          *philas;
 }       t_init;
 
 typedef struct s_philo
@@ -46,7 +49,7 @@ typedef struct s_philo
 
 int     ft_atoi(const char *str);
 int     get_args(int ac, char **ar, t_init *pars);
-void    ft_thinking(t_philo *philas);
-void    ft_sleeping(t_philo *philas);
+void    ft_thinking(t_philo *philas, int index);
+void    ft_sleeping(t_philo *philas, int index);
 
 #endif
