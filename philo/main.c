@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/21 10:43:18 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:00:57 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,15 @@ void    monitoring(t_philo *philas)
         i = 0;
         while (i < philas->init->n_philo)
         {
+            while (pthread_mutex_lock(&((philas + i)->dead)) != 0)
+                usleep(42);
             if ((philas + i)->last_eated - current_time >= (philas + i)->init->tt_die)
+            {
+                pthread_mutex_unlock(&((philas + i)->dead));
+                printf("philo has dead\n");
                 exit(0);
+            }
+            pthread_mutex_unlock(&((philas + i)->dead));
             ++i;
         }
     }
@@ -38,23 +45,11 @@ void    vita(t_philo *philas)
     current_time = gettimeofday(NULL, NULL);
     while (is_alive(philas) && philas->meals < philas->init->n_eat)
     {
-        if (philas->index == 1)
-            pthread_mutex_lock(&philas->init->forks[philas->init->n_philo - 1]);
-        else
-            pthread_mutex_lock(&philas->init->forks[index - 1]);
-        printf("%d %d has taken a fork\n", current_time, index);
-        pthread_mutex_lock(&philas->init->forks[index]);
-        printf("%d %d has taken a fork\n", current_time, index);
-        /////////////////
+        lock_the_fork(philas + index, index, current_time);
         ft_eating(philas);
-        if (philas->index == 1)
-            pthread_mutex_unlock(&philas->init->forks[philas->init->n_philo - 1]);
-        else
-            pthread_mutex_unlock(&philas->init->forks[index - 1]);
-        pthread_mutex_unlock(&philas->init->forks[index]);
+        unlock_the_fork(philas + index, index);
         philas->last_eated = gettimeofday(NULL, NULL);
         philas->meals++;
-        /////////////////
         ft_sleeping(philas, index);
         ft_thinking(philas, index);
     }

@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/21 10:40:13 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:00:52 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ int     ft_atoi(const char *str);
 int     get_args(int ac, char **ar, t_init *pars);
 void    ft_thinking(t_philo *philas, int index);
 void    ft_sleeping(t_philo *philas, int index);
+void    lock_the_fork(t_philo *philas, int index, int current_time);
+void    unlock_the_fork(t_philo *philas, int index);
 
 #endif
