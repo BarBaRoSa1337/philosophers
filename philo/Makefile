@@ -1,4 +1,4 @@
-SRCS	= main.c philo_utils.c
+SRCS = philo_utils.c main.c
 
 OBJ = $(SRCS:.c=.o)
 
@@ -12,7 +12,10 @@ all:$(NAME)
 $(NAME):$(OBJ)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)
