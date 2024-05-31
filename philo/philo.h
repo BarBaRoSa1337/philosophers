@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/28 11:51:24 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/31 13:09:03 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct      s_philo
 {
     pthread_mutex_t right_fork;
     pthread_mutex_t left_fork;
+    pthread_mutex_t dead;
     int             is_dead;
     t_init          *init;
     int             index;
@@ -55,5 +56,7 @@ void    ft_thinking(t_philo *philas, int index);
 void    ft_sleeping(int tt_sleep, int index);
 void    ft_eating(int tt_eat, int index);
 int     ft_atoi(const char *str);
-
+size_t whats_time(void);
+void    Im_deaD(t_philo *philo);
+int Is_alivE(t_init *init);
 #endif

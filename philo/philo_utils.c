@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/28 11:50:49 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/31 12:19:59 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void    ft_thinking(t_philo *philas, int index)
 
     current_time = 0;
     printf("%d %d is thinking\n", current_time, index);
-    usleep(500000);
+    usleep(5000);
 }
 
 void    ft_sleeping(int tt_sleep, int index)
@@ -99,16 +99,20 @@ void    ft_sleeping(int tt_sleep, int index)
 
 void    lock_the_fork(t_philo *philas, int index, int current_time)
 {
-    int rigth_fork;
+    pthread_mutex_t *right_fork;
+    pthread_mutex_t *left_fork;
+    int             rigth_fork;
 
-    current_time = 0;
     if (philas->index == 1)
         rigth_fork = philas->init->n_philo - 1;
     else
         rigth_fork = index - 1;
-    pthread_mutex_lock(&philas->init->forks[rigth_fork]);
+    right_fork = philas->init->forks + rigth_fork;
+    left_fork = philas->init->forks + index;
+    current_time = 0;
+    pthread_mutex_lock(right_fork);
     printf("%d %d has taken a fork\n", current_time, index);
-    pthread_mutex_lock(&philas->init->forks[index]);
+    pthread_mutex_lock(left_fork);
     printf("%d %d has taken a fork\n", current_time, index);
 }
 
