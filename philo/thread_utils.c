@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/31 13:09:29 by achakour         ###   ########.fr       */
+/*   Updated: 2024/05/31 13:27:05 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 size_t whats_time(void)
 {
-    struct timeval tv;
+	struct timeval	time;
 
-    gettimeofday(&tv, NULL);
-    size_t microseconds =  (size_t)tv.tv_sec * 1000000LL +  (size_t)tv.tv_usec;
-    return (microseconds);
+	if(gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday()failed\n", 22);
+	return(time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
 int Is_alivE(t_init *init)
