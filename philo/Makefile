@@ -2,7 +2,7 @@ SRCS = philo_utils.c main.c thread_utils.c
 
 OBJ = $(SRCS:.c=.o)
 
-CFLAGS =#-Wall -Wextra -Werror
+CFLAGS =-fsanitize=thread #-Wall -Wextra -Werror
 NAME = philo
 RM = rm -f
 CC = cc
@@ -15,7 +15,7 @@ $(NAME):$(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)

@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/31 13:39:52 by achakour         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:07:15 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,37 @@ typedef struct      s_init
    int              tt_die;
    int              tt_eat;
    int              n_eat;
-   int              t_start;
+   size_t              t_start;
    _Atomic int      is_dead;
    pthread_mutex_t  dead;
    pthread_mutex_t  *forks;
-   pthread_t        *philo;
-   t_philo          *philas;
+   t_philo        **philos;
+   t_philo          *strct_phil;
 }                   t_init;
 
 typedef struct      s_philo
 {
-    pthread_mutex_t right_fork;
-    pthread_mutex_t left_fork;
+    pthread_mutex_t r_forchit;
+    pthread_mutex_t l_forchit;
+    t_init          *init;
     pthread_mutex_t dead;
     _Atomic int     is_dead;
-    t_init          *init;
     int             index;
-    _Atomic int     last_eated;
+    int         last_eated;
     int             meals;
+    pthread_t        tread;
 }                   t_philo;
 
-void    lock_the_fork(t_philo *philas, int index, int current_time);
+void    lock_the_fork(t_philo *philas, int index);
 void    unlock_the_fork(t_philo *philas, int index);
 int     get_args(int ac, char **ar, t_init *pars);
-void    ft_thinking(t_philo *philas, int index);
-void    ft_sleeping(int tt_sleep, int index);
-void    ft_eating(int tt_eat, int index);
+void    ft_thinking(t_init *pars, int index);
+void    ft_sleeping(int index, t_init *pars);
+void    ft_eating(int index, t_init *pars);
 int     ft_atoi(const char *str);
-size_t whats_time(void);
+size_t whats_time(size_t t_start);
 void    Im_deaD(t_philo *philo);
-int Is_alivE(t_init *init);
+pthread_mutex_t *init_forks(t_init *pars);
+// int Is_alivE(t_init *init);
+
 #endif

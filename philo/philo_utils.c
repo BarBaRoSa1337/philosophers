@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/31 12:19:59 by achakour         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:06:34 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ int get_args(int ac, char **ar, t_init *pars)
 
     i = 1;
     pars->n_eat = 0;
-    if (ac != 5 || ac > 6)
-    {
-        printf("Invalid use Try:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
-            [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
-        return (0);
-    }
+    // if (ac != 5 || ac > 6)
+    // {
+    //     printf("Invalid use Try:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
+    //         [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
+    //     return (0);
+    // }
     while (i <= ac)
     {
         if (i == 2)
@@ -69,58 +69,63 @@ int get_args(int ac, char **ar, t_init *pars)
     return (1);
 }
 
-void    ft_eating(int tt_eat, int index)
+void    ft_eating(int index, t_init *pars)
 {
-    int current_time;
+    size_t current_time;
 
-    current_time = 0;
-    printf("%d %d is eating\n", current_time, index);
-    usleep(tt_eat);
+    current_time = whats_time(pars->t_start);
+    printf("%zu %d is eating\n", current_time, index);
+    usleep(pars->tt_eat);
 }
 
-void    ft_thinking(t_philo *philas, int index)
+void    ft_thinking(t_init *pars, int index)
 {
-    int current_time;
-    (void)philas;
+    size_t current_time;
 
-    current_time = 0;
-    printf("%d %d is thinking\n", current_time, index);
-    usleep(5000);
+    current_time = whats_time(pars->t_start);
+    printf("%zu %d is thinking\n", current_time, index);
 }
 
-void    ft_sleeping(int tt_sleep, int index)
+void    ft_sleeping(int index, t_init *pars)
 {
-    int current_time;
+    size_t current_time;
 
-    current_time = 0;
-    printf("%d %d is sleeping\n", current_time, index);
-    usleep(tt_sleep);
+    current_time = whats_time(pars->t_start);
+    printf("%zu %d is sleeping\n", current_time, index);
+    usleep(pars->tt_sleep);
 }
 
-void    lock_the_fork(t_philo *philas, int index, int current_time)
+void    lock_the_fork(t_philo *philas, int index)
 {
-    pthread_mutex_t *right_fork;
-    pthread_mutex_t *left_fork;
-    int             rigth_fork;
+    size_t  current_time;
 
-    if (philas->index == 1)
-        rigth_fork = philas->init->n_philo - 1;
-    else
-        rigth_fork = index - 1;
-    right_fork = philas->init->forks + rigth_fork;
-    left_fork = philas->init->forks + index;
-    current_time = 0;
-    pthread_mutex_lock(right_fork);
-    printf("%d %d has taken a fork\n", current_time, index);
-    pthread_mutex_lock(left_fork);
-    printf("%d %d has taken a fork\n", current_time, index);
+    current_time = whats_time(philas->init->t_start);
+    pthread_mutex_lock(&philas->l_forchit);
+    printf("%zu %d has taken a fork\n", current_time, index);
+    pthread_mutex_lock(&philas->r_forchit);
+    current_time = whats_time(philas->init->t_start);
+    printf("%zu %d has taken a fork\n", current_time, index);
 }
 
 void    unlock_the_fork(t_philo *philas, int index)
 {
-    if (philas->index == 1)
-            pthread_mutex_unlock(&philas->init->forks[philas->init->n_philo - 1]);
-        else
-            pthread_mutex_unlock(&philas->init->forks[index - 1]);
-    pthread_mutex_unlock(&philas->init->forks[index]);
+    pthread_mutex_unlock(&philas->l_forchit);
+    pthread_mutex_unlock(&philas->r_forchit);
+}
+
+pthread_mutex_t *init_forks(t_init *pars)
+{
+    pthread_mutex_t *forchit;
+    int             n_philo;
+    int             i;
+
+    i = 0;
+    n_philo = pars->n_philo;
+    forchit = malloc(sizeof(pthread_mutex_t) * n_philo);
+    while (i < n_philo)
+    {
+        pthread_mutex_init(&forchit[i], NULL);
+        ++i;
+    }
+    return (forchit);
 }

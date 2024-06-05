@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/05/31 13:10:27 by achakour         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:17:47 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,66 @@
 
 void    *vita(void *phil)
 {
-    t_philo *philas =  (t_philo *)phil;
-    int current_time;
-    int index;
+    int     current_time;
+    t_philo *philas;
+    int     index;
 
+    philas = phil;
     index = philas->index;
-    current_time = 0;
-    while (Is_alivE(philas->init))
+    current_time = whats_time(philas->init->t_start);
+    // while (Is_alivE(philas->init))
+    while(1)
     {
-        if (philas->meals >= philas->init->n_eat)
+        if (philas->meals >= philas->init->n_eat && philas->init->n_eat != 0)
             break ;
-        lock_the_fork(phil, index, current_time);
-        ft_eating(philas->init->tt_eat, index);
+        lock_the_fork(phil, index);
+        ft_eating(index, philas->init);
         unlock_the_fork(phil, index);
-        philas->last_eated = whats_time();
-        if (current_time - philas->last_eated > philas->init->tt_die)
+        philas->last_eated = whats_time(philas->init->t_start);
+        if (current_time - philas->last_eated >= philas->init->tt_die)
             Im_deaD(phil);
         philas->meals++;
-        ft_sleeping(philas->init->tt_sleep, index);
-        ft_thinking(philas, index);
+        ft_sleeping(index, philas->init);
+        ft_thinking(philas->init, index);
     }
     return (philas);
 }
 
-void    philo_init(t_init *pars)
+t_philo **init_philos(t_init *pars)
 {
-    t_philo     *philosofers;
+    t_philo     **falasifa;
+    int         n_philo;
     int         i;
 
-    i = -1;
-    philosofers = malloc(sizeof(t_philo) * pars->n_philo);
-    pars->forks = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
-    pars->philo = malloc(sizeof(pthread_mutex_t) * pars->n_philo);
-    pars->philas = philosofers;
-    pars->is_dead = 0;
-    while (i < pars->n_philo)
-        pthread_mutex_init(&pars->forks[i], NULL);
-    i = -1;
-    while (++i < pars->n_philo)
+    i = 0;
+    n_philo = pars->n_philo;
+    pars->t_start = whats_time(0);
+    falasifa = (t_philo **)malloc(sizeof(t_philo *) * n_philo);
+    while (i < n_philo)
     {
-        (philosofers + i)->init = pars;
-        (philosofers + i)->meals = 0;
-        if (pars->n_philo % 2)
-            usleep(1337);
-        (philosofers + i)->index = i + 1;
-        pthread_create(pars->philo + i, NULL, vita, philosofers + i);
+        falasifa[i] = malloc(sizeof(t_philo) * n_philo);
+        pthread_mutex_init(&falasifa[i]->dead, NULL);
+        falasifa[i]->is_dead = 0;
+        falasifa[i]->meals = 0;
+        falasifa[i]->init = pars;
+        falasifa[i]->index = i + 1;
+        falasifa[i]->l_forchit = pars->forks[i];
+        falasifa[i]->r_forchit = pars->forks[(i+1) % n_philo];
+        ++i;
     }
-    i = -1;
-    while (++i < pars->n_philo)
-        pthread_join(*(pars->philo + i), NULL);
+    i = 0;
+    while (i < n_philo)
+    {
+        pthread_create(&falasifa[i]->tread, NULL, vita, falasifa[i]);
+        ++i;
+    }
+    i = 0;
+    while (i < n_philo)
+    {
+       pthread_join(falasifa[i]->tread, NULL);
+       ++i;
+    }
+    return (falasifa);
 }
 
 int main(int ac, char **ar)
@@ -75,6 +86,7 @@ int main(int ac, char **ar)
     // if (ac < 5 || !get_args(ac, ar, pars))
     //     return (1);
     get_args(ac , ar, pars);
-    philo_init(pars);
+    pars->forks = init_forks(pars);
+    init_philos(pars);
     return (0);
 }
