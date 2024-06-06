@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/06/05 10:06:34 by achakour         ###   ########.fr       */
+/*   Updated: 2024/06/06 09:51:02 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int get_args(int ac, char **ar, t_init *pars)
 
 void    ft_eating(int index, t_init *pars)
 {
+    t_philo *philo;
     size_t current_time;
 
     current_time = whats_time(pars->t_start);
@@ -100,9 +101,13 @@ void    lock_the_fork(t_philo *philas, int index)
     size_t  current_time;
 
     current_time = whats_time(philas->init->t_start);
-    pthread_mutex_lock(&philas->l_forchit);
+    if (pthread_mutex_lock(&philas->l_forchit) != 0)
+        return ;
     printf("%zu %d has taken a fork\n", current_time, index);
-    pthread_mutex_lock(&philas->r_forchit);
+    if (philas->init->n_philo == 1)
+        return ;
+    if (pthread_mutex_lock(&philas->r_forchit) != 0)
+        return ;
     current_time = whats_time(philas->init->t_start);
     printf("%zu %d has taken a fork\n", current_time, index);
 }

@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/06/05 10:32:52 by achakour         ###   ########.fr       */
+/*   Updated: 2024/06/06 09:53:36 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ void    *vita(void *phil)
         if (philas->meals >= philas->init->n_eat && philas->init->n_eat != 0)
             break ;
         lock_the_fork(phil, index);
-        ft_eating(index, philas->init);
-        unlock_the_fork(phil, index);
+        if (philas->init->n_philo != 1)
+        {
+            ft_eating(index, philas->init);
+            philas->meals++;
+            unlock_the_fork(phil, index);
+        }
         philas->last_eated = whats_time(philas->init->t_start);
-        // if (philas->last_eated - current_time >= philas->init->tt_die)
-        //     Im_deaD(phil);
-        philas->meals++;
         ft_sleeping(index, philas->init);
         ft_thinking(philas->init, index);
     }
