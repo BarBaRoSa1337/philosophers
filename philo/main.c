@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/06/06 09:53:36 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:43:07 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ void    *vita(void *phil)
 
     philas = phil;
     index = philas->index;
-    current_time = whats_time(philas->init->t_start);
-    // while (Is_alivE(philas->init))
-    while(1)
+    current_time = get_time();
+    while(is_dead(philas->init) != 1)
     {
         if (philas->meals >= philas->init->n_eat && philas->init->n_eat != 0)
             break ;
@@ -30,17 +29,17 @@ void    *vita(void *phil)
         if (philas->init->n_philo != 1)
         {
             ft_eating(index, philas->init);
-            philas->meals++;
             unlock_the_fork(phil, index);
+            philas->meals++;
         }
-        philas->last_eated = whats_time(philas->init->t_start);
+        philas->last_eated = get_time();
         ft_sleeping(index, philas->init);
         ft_thinking(philas->init, index);
     }
     return (philas);
 }
 
-t_philo **init_philos(t_init *pars)
+void    init_philos(t_init *pars)
 {
     t_philo     **falasifa;
     int         n_philo;
@@ -48,8 +47,9 @@ t_philo **init_philos(t_init *pars)
 
     i = 0;
     n_philo = pars->n_philo;
-    pars->t_start = whats_time(0);
+    pars->t_start = get_time();
     falasifa = (t_philo **)malloc(sizeof(t_philo *) * n_philo);
+    pthread_mutex_init(&pars->dead, NULL);
     while (i < n_philo)
     {
         falasifa[i] = malloc(sizeof(t_philo) * n_philo);
@@ -68,24 +68,24 @@ t_philo **init_philos(t_init *pars)
         pthread_create(&falasifa[i]->tread, NULL, vita, falasifa[i]);
         ++i;
     }
+    // pthread_create(&falasifa[i]->tread, NULL, monitor, falasifa[i]);
     i = 0;
     while (i < n_philo)
     {
        pthread_join(falasifa[i]->tread, NULL);
        ++i;
     }
-    return (falasifa);
 }
 
 int main(int ac, char **ar)
 {
     t_init  *pars;
 
+    // if (ac < 5 || !get_args(ac, ar, pars))
+    //     return (1);
     pars = malloc(sizeof(t_init));
     if (!pars)
         return (0);
-    // if (ac < 5 || !get_args(ac, ar, pars))
-    //     return (1);
     get_args(ac , ar, pars);
     pars->forks = init_forks(pars);
     init_philos(pars);

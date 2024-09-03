@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/06/05 10:07:15 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:36:05 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct      s_philo
     pthread_t        tread;
 }                   t_philo;
 
+pthread_mutex_t         *init_forks(t_init *pars);
 void    lock_the_fork(t_philo *philas, int index);
 void    unlock_the_fork(t_philo *philas, int index);
 int     get_args(int ac, char **ar, t_init *pars);
@@ -57,9 +58,9 @@ void    ft_thinking(t_init *pars, int index);
 void    ft_sleeping(int index, t_init *pars);
 void    ft_eating(int index, t_init *pars);
 int     ft_atoi(const char *str);
-size_t whats_time(size_t t_start);
 void    Im_deaD(t_philo *philo);
-pthread_mutex_t *init_forks(t_init *pars);
-// int Is_alivE(t_init *init);
+int     is_dead(t_init *init);
+size_t  get_time(void);
+void    ft_sleep(long time, t_init *s);
 
 #endif

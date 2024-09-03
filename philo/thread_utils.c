@@ -6,19 +6,40 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/06/05 10:29:05 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:43:43 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t whats_time(size_t t_start)
+int is_dead(t_init *s)
+{
+    pthread_mutex_lock(&s->dead);
+    if (s->is_dead == 1)
+        return (pthread_mutex_unlock(&s->dead), 1);
+    else
+        return (pthread_mutex_unlock(&s->dead), 0);
+}
+
+size_t get_time(void)
 {
 	struct timeval	time;
 
 	if(gettimeofday(&time, NULL) == -1)
 		write(2, "gettimeofday()failed\n", 22);
-	return((time.tv_sec * 1000 + time.tv_usec / 1000) - t_start);
+	return((time.tv_sec * 1000 + time.tv_usec / 1000));
+}
+
+void ft_sleep(long time, t_init *s)
+{
+    long    start;
+    
+    start = get_time();
+    while (get_time() - start < time)
+    {
+        if (is_dead(s) == 1)
+            break ;
+    }
 }
 
 // int Is_alivE(t_init *init)
@@ -46,11 +67,10 @@ void    Im_deaD(t_philo *philo)
     int current_time;
     int index;
 
-    while (pthread_mutex_lock(&(philo->init->dead)) != 0)
-        usleep(42);
+    pthread_mutex_lock(&(philo->init->dead));
     philo->init->is_dead = 1;
     pthread_mutex_unlock(&(philo->init->dead));
     index = philo->index;
-    current_time = whats_time(philo->init->t_start);
+    current_time = get_time();
     printf("%d %d died\n", current_time, index);
 }
