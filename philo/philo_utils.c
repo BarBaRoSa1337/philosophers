@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/03 18:37:47 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/15 15:29:43 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,15 @@ int get_args(int ac, char **ar, t_init *pars)
 {
     int i;
 
-    i = 1;
-    pars->n_eat = 0;
     // if (ac != 5 || ac > 6)
     // {
     //     printf("Invalid use Try:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
     //         [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
     //     return (0);
     // }
+
+    i = 1;
+    pars->n_eat = 0;
     while (i <= ac)
     {
         if (i == 2)
@@ -69,53 +70,6 @@ int get_args(int ac, char **ar, t_init *pars)
     return (1);
 }
 
-void    ft_eating(int index, t_init *pars)
-{
-    size_t current_time;
-    t_philo *philo;
-
-    current_time = get_time();
-    printf("%zu %d is eating\n", current_time, index);
-    ft_sleep(pars->tt_eat, pars);
-}
-
-void    ft_thinking(t_init *pars, int index)
-{
-    size_t current_time;
-
-    current_time = get_time();
-    printf("%zu %d is thinking\n", current_time, index);
-}
-
-void    ft_sleeping(int index, t_init *pars)
-{
-    size_t current_time;
-
-    current_time = get_time();
-    printf("%zu %d is sleeping\n", current_time, index);
-    ft_sleep(pars->tt_sleep, pars);
-}
-
-void    lock_the_fork(t_philo *philas, int index)
-{
-    size_t  current_time;
-
-    current_time = get_time();
-    pthread_mutex_lock(&philas->l_forchit);
-    printf("%zu %d has taken a fork\n", current_time, index);
-    if (philas->init->n_philo == 1)
-        return ;
-    pthread_mutex_lock(&philas->r_forchit);
-    current_time = get_time();
-    printf("%zu %d has taken a fork\n", current_time, index);
-}
-
-void    unlock_the_fork(t_philo *philas, int index)
-{
-    pthread_mutex_unlock(&philas->l_forchit);
-    pthread_mutex_unlock(&philas->r_forchit);
-}
-
 pthread_mutex_t *init_forks(t_init *pars)
 {
     pthread_mutex_t *forchit;
@@ -125,6 +79,8 @@ pthread_mutex_t *init_forks(t_init *pars)
     i = 0;
     n_philo = pars->n_philo;
     forchit = malloc(sizeof(pthread_mutex_t) * n_philo);
+    if (!forchit)
+        return (NULL);
     while (i < n_philo)
     {
         pthread_mutex_init(&forchit[i], NULL);

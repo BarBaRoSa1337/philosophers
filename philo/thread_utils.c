@@ -6,20 +6,11 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/03 18:43:43 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/19 10:40:36 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int is_dead(t_init *s)
-{
-    pthread_mutex_lock(&s->dead);
-    if (s->is_dead == 1)
-        return (pthread_mutex_unlock(&s->dead), 1);
-    else
-        return (pthread_mutex_unlock(&s->dead), 0);
-}
 
 size_t get_time(void)
 {
@@ -33,44 +24,46 @@ size_t get_time(void)
 void ft_sleep(long time, t_init *s)
 {
     long    start;
-    
+
     start = get_time();
-    while (get_time() - start < time)
+    while (((long)get_time() - start < time) && is_dead(s) != 1);
+}
+
+void    kill_philo(t_init *pars)
+{
+    int i;
+
+    i = 0;
+    while (i < pars->n_philo)
     {
-        if (is_dead(s) == 1)
-            break ;
+        pthread_mutex_lock(&pars->philos[i]->dead);
+        pars->philos[i]->is_dead = 1;
+        pthread_mutex_unlock(&pars->philos[i]->dead);
+        ++i;
     }
 }
 
-// int Is_alivE(t_init *init)
-// {
-//     t_philo *philo;
-//     int     i;
-
-//     philo = init->philas;
-//     while (i < init->n_philo)
-//     {
-//         while (pthread_mutex_lock(&(philo + i)->dead) != 0)
-//             usleep(1337);
-//         if ((philo + i)->is_dead == 1)
-//         {
-//             pthread_mutex_unlock(&(philo + i)->dead);
-//             return (1);
-//         }
-//         pthread_mutex_unlock(&(philo + i)->dead);
-//     }
-//     return (0);
-// }
-
-void    Im_deaD(t_philo *philo)
+void    *philo_monitor(void *p)
 {
-    int current_time;
-    int index;
+	t_init	*pars;
+    int i;
+    size_t  time;
 
-    pthread_mutex_lock(&(philo->init->dead));
-    philo->init->is_dead = 1;
-    pthread_mutex_unlock(&(philo->init->dead));
-    index = philo->index;
-    current_time = get_time();
-    printf("%d %d died\n", current_time, index);
+	pars = p;
+    while (1)
+    {
+        i = 0;
+        while (i < pars->n_philo)
+        {
+            if (get_time() - pars->philos[i]->t_start >= pars->tt_die)
+            {
+                time = get_time() - pars->philos[i]->t_start;
+                printf("%zu %d is dead\n", time, i);
+                kill_philo(pars);
+                exit (0);
+            }
+            ++i;
+        }
+    }
+	return (NULL);
 }
