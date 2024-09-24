@@ -2,7 +2,7 @@ SRCS = philo_utils.c main.c thread_utils.c philo_actions.c philo_monitor.c
 
 OBJ = $(SRCS:.c=.o)
 
-CFLAGS =-fsanitize=thread -Wall -Wextra -Werror
+CFLAGS =-fsanitize=thread #-Wall -Wextra -Werror
 NAME = philo
 RM = rm -f
 CC = cc

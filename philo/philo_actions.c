@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 11:13:03 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/19 10:38:30 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:40:52 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@
 void    ft_eating(int index, t_init *pars)
 {
     size_t current_time;
-    t_philo *philo;
+    t_philo **philo;
 
-    if (is_dead(pars))
-        return ;
+    philo = pars->philos;
     current_time = get_time() - pars->t_start;
     printf("%zu %d is eating\n", current_time, index);
+    philo[index]->last_eated = get_time();
+    philo[index]->meals++;
+    lock_the_fork(philo, index);
     ft_sleep(pars->tt_eat, pars);
+    unlock_the_fork(philo, index);
 }
 
 void    ft_thinking(t_init *pars, int index)
@@ -56,7 +59,7 @@ void    lock_the_fork(t_philo *philas, int index)
     current_time = get_time() - philas->init->t_start;
     pthread_mutex_lock(&philas->l_forchit);
     printf("%zu %d has taken a fork\n", current_time, index);
-    if (philas->init->n_philo == 1 || is_dead(philas->init))
+    if (philas->init->n_philo == 1)
         return ;
     pthread_mutex_lock(&philas->r_forchit);
     current_time = get_time() - philas->init->t_start;

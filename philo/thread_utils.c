@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/19 10:40:36 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:39:49 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,28 +26,14 @@ void ft_sleep(long time, t_init *s)
     long    start;
 
     start = get_time();
-    while (((long)get_time() - start < time) && is_dead(s) != 1);
+    while (((long)get_time() - start < time) && !(s->is_dead));
 }
 
-void    kill_philo(t_init *pars)
-{
-    int i;
-
-    i = 0;
-    while (i < pars->n_philo)
-    {
-        pthread_mutex_lock(&pars->philos[i]->dead);
-        pars->philos[i]->is_dead = 1;
-        pthread_mutex_unlock(&pars->philos[i]->dead);
-        ++i;
-    }
-}
-
-void    *philo_monitor(void *p)
+void    life_guarde(t_init *p)
 {
 	t_init	*pars;
-    int i;
     size_t  time;
+    int i;
 
 	pars = p;
     while (1)
@@ -55,15 +41,17 @@ void    *philo_monitor(void *p)
         i = 0;
         while (i < pars->n_philo)
         {
-            if (get_time() - pars->philos[i]->t_start >= pars->tt_die)
+            //lock the meal check
+            if (get_time() - pars->philos[i]->last_eated >= pars->tt_die)
             {
-                time = get_time() - pars->philos[i]->t_start;
+                time = get_time() - pars->t_start;
                 printf("%zu %d is dead\n", time, i);
-                kill_philo(pars);
-                exit (0);
+                pars->is_dead = 1;
             }
+            //unlock it
             ++i;
         }
+        if (pars->is_dead)
+            break ;
     }
-	return (NULL);
 }
