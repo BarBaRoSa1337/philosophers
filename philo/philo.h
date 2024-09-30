@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/24 17:39:39 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/25 15:35:29 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct      s_init
    long              n_eat;
    pthread_mutex_t  *forks;
    t_philo        **philos;
+    pthread_mutex_t dead_flag;
+//    pthread_mutex_t msg;
    int              is_dead;
    ssize_t              t_start;
 }                   t_init;
@@ -43,6 +45,7 @@ typedef struct      s_philo
     long             last_eated;
     int             index;
     int             meals;
+    pthread_mutex_t l9ess;
     pthread_t        tread;
 }                   t_philo;
 
@@ -55,8 +58,7 @@ void    ft_thinking(t_init *pars, int index);
 void    ft_sleeping(int index, t_init *pars);
 void    ft_eating(int index, t_init *pars);
 int     ft_atoi(const char *str);
-void    Im_deaD(t_philo *philo);
-short int     is_dead(t_init *s);
+int     is_dead(t_init *p);
 size_t  get_time(void);
 void    ft_sleep(long time, t_init *s);
 

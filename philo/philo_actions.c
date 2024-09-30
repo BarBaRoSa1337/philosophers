@@ -6,64 +6,62 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 11:13:03 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/24 17:40:52 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:16:47 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void    set_eat(t_philo *p)
+{
+    pthread_mutex_lock(&p->l9ess);
+    p->meals++;
+    p->last_eated = get_time();
+    pthread_mutex_unlock(&p->l9ess);    
+}
 
 void    ft_eating(int index, t_init *pars)
 {
     size_t current_time;
     t_philo **philo;
 
+    if (is_dead(pars))
+        return ;
     philo = pars->philos;
     current_time = get_time() - pars->t_start;
     printf("%zu %d is eating\n", current_time, index);
-    philo[index]->last_eated = get_time();
-    philo[index]->meals++;
-    lock_the_fork(philo, index);
+    set_eat(philo[index]);
+    lock_the_fork(philo[index], index);
     ft_sleep(pars->tt_eat, pars);
-    unlock_the_fork(philo, index);
+    unlock_the_fork(philo[index], index);
 }
 
 void    ft_thinking(t_init *pars, int index)
 {
-    size_t current_time;
-
     if (is_dead(pars))
         return ;
-    current_time = get_time() - pars->t_start;
-    printf("%zu %d is thinking\n", current_time, index);
+    printf("%zu %d is thinking\n", get_time() - pars->t_start, index);
     usleep (133);
 }
 
 void    ft_sleeping(int index, t_init *pars)
 {
-    size_t current_time;
-
     if (is_dead(pars))
         return ;
-    current_time = get_time() - pars->t_start;
-    printf("%zu %d is sleeping\n", current_time, index);
+    printf("%zu %d is sleeping\n", get_time() - pars->t_start, index);
     ft_sleep(pars->tt_sleep, pars);
 }
 
 void    lock_the_fork(t_philo *philas, int index)
 {
-    size_t  current_time;
-
     if (is_dead(philas->init))
         return ;
-    current_time = get_time() - philas->init->t_start;
     pthread_mutex_lock(&philas->l_forchit);
-    printf("%zu %d has taken a fork\n", current_time, index);
+    printf("%zu %d has taken a fork\n", get_time() - philas->init->t_start, index);
     if (philas->init->n_philo == 1)
         return ;
     pthread_mutex_lock(&philas->r_forchit);
-    current_time = get_time() - philas->init->t_start;
-    printf("%zu %d has taken a fork\n", current_time, index);
+    printf("%zu %d has taken a fork\n", get_time() - philas->init->t_start, index);
 }
 
 void    unlock_the_fork(t_philo *philas, int index)

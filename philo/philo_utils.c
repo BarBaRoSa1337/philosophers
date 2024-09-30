@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/15 15:29:43 by achakour         ###   ########.fr       */
+/*   Updated: 2024/09/25 15:37:15 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-int get_args(int ac, char **ar, t_init *pars)
+short int get_args(int ac, char **ar, t_init *pars)
 {
     int i;
 
@@ -75,12 +75,13 @@ pthread_mutex_t *init_forks(t_init *pars)
     pthread_mutex_t *forchit;
     int             n_philo;
     int             i;
-
+ 
     i = 0;
     n_philo = pars->n_philo;
     forchit = malloc(sizeof(pthread_mutex_t) * n_philo);
     if (!forchit)
         return (NULL);
+    pthread_mutex_init(&pars->dead_flag, NULL);
     while (i < n_philo)
     {
         pthread_mutex_init(&forchit[i], NULL);
