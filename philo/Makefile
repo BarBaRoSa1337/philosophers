@@ -1,4 +1,4 @@
-SRCS = philo_utils.c main.c thread_utils.c philo_actions.c
+SRCS = philo_utils.c main.c philo_actions.c life_guard.c
 
 OBJ = $(SRCS:.c=.o)
 
