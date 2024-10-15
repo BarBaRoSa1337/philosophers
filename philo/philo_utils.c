@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/09/25 15:37:15 by achakour         ###   ########.fr       */
+/*   Updated: 2024/10/14 12:59:28 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ short int get_args(int ac, char **ar, t_init *pars)
     //         [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
     //     return (0);
     // }
-
     i = 1;
-    pars->n_eat = 0;
+    pars->n_eat = -1;
+    pars->nbr_eating = 0;
     while (i <= ac)
     {
         if (i == 2)
@@ -70,22 +70,20 @@ short int get_args(int ac, char **ar, t_init *pars)
     return (1);
 }
 
-pthread_mutex_t *init_forks(t_init *pars)
+void    init_forks(t_init *pars)
 {
-    pthread_mutex_t *forchit;
-    int             n_philo;
-    int             i;
- 
+    int n_philo;
+    int i;
+
     i = 0;
     n_philo = pars->n_philo;
-    forchit = malloc(sizeof(pthread_mutex_t) * n_philo);
-    if (!forchit)
-        return (NULL);
+    pthread_mutex_init(&pars->msg, NULL);
     pthread_mutex_init(&pars->dead_flag, NULL);
+    pars->forks = NULL;
+    pars->forks = malloc(sizeof(pthread_mutex_t) * n_philo);
     while (i < n_philo)
     {
-        pthread_mutex_init(&forchit[i], NULL);
+        pthread_mutex_init(&pars->forks[i], NULL);
         ++i;
     }
-    return (forchit);
 }
