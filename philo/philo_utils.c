@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/10/15 15:10:57 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:57:47 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int	ft_atoi(const char *str)
 	sign = 1;
 	while (str[i] == '\f' || str[i] == '\t' || str[i] == '\r' || str[i] == '\n'
 		|| str[i] == ' ' || str[i] == '\v')
-	{
 		++i;
-	}
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
@@ -44,12 +42,12 @@ short int	get_args(int ac, char **ar, t_init *pars)
 {
 	int	i;
 
-	// if (ac != 5 || ac > 6)
-	// {
-	//     printf("Invalid use Try:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
-    //         [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
-	//     return (0);
-	// }
+	if (ac < 5 || ac > 6)
+	{
+	    printf("Invalid use Try:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
+            [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
+	    return (0);
+	}
 	i = 1;
 	pars->n_eat = -1;
 	pars->nbr_eating = 0;
