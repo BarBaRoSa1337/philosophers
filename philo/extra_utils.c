@@ -6,11 +6,28 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 12:22:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 12:23:55 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:00:23 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	free_all(t_init *init)
+{
+	t_philo	**p;
+	int		i;
+
+	i = 0;
+	p = init->philos;
+	while (i < init->n_philo)
+	{
+		free(p[i]);
+		++i;
+	}
+	free(init->forks);
+	free(init);
+	free(p);
+}
 
 size_t	get_time(void)
 {

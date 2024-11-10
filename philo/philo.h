@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 12:25:03 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:56:19 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ int						ft_eating(int index, t_init *pars);
 void					unlock_the_fork(t_philo *philas);
 void					ft_sleep(long time, t_init *s);
 void					init_forks(t_init *pars);
+void					free_all(t_init *init);
 int						ft_atoi(const char *str);
 void					life_guarde(t_init *p);
+short int				check_num(t_init *p);
 int						is_dead(t_init *p);
 int						ft_isalpha(int c);
 int						ft_isnum(int c);

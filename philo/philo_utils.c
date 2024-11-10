@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 12:35:23 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:41:02 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ short int	check_num(t_init *p)
 	if (p->tt_sleep <= 0 || p->tt_eat <= 0 || p->tt_die <= 0 || p->n_philo <= 0
 		|| p->n_philo > 200)
 		return (1);
+	else if (p->n_eat != -1 && p->n_eat <= 0)
+		return (1);
 	return (0);
 }
 
@@ -57,7 +59,7 @@ short int	check_syntax(int ac, char **ar)
 		j = 0;
 		while (ar[i][j])
 		{
-			if (ft_isalpha(ar[i][j]))
+			if (!ft_isnum(ar[i][j]) && ar[i][j] != '-' && ar[i][j] != '+')
 				return (1);
 			else if (ft_isnum(ar[i][j]) && ar[i][j + 1] && !ft_isnum(ar[i][j
 						+ 1]))
@@ -73,7 +75,7 @@ short int	get_args(int ac, char **ar, t_init *pars)
 {
 	int	i;
 
-	if ((ac < 4 && ac < 7) || check_syntax(ac, ar))
+	if (ac < 5 || ac > 6 || check_syntax(ac, ar))
 	{
 		printf("Invalid Use Try Valid Arguments:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
 		[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");

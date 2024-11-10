@@ -1,8 +1,8 @@
-SRCS = philo_utils.c main.c philo_actions.c life_guard.c
+SRCS = philo_utils.c main.c philo_actions.c life_guard.c extra_utils.c
 
 OBJ = $(SRCS:.c=.o)
 
-CFLAGS = -g3 -fsanitize=thread -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g3
 NAME = philo
 RM = rm -f
 CC = cc
