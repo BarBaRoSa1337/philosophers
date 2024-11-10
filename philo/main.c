@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:29:50 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/08 12:13:34 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:35:48 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ int	main(int ac, char **ar)
 	pars = malloc(sizeof(t_init));
 	if (!pars)
 		return (0);
-	if (!get_args(ac, ar, pars))
-	    return (free(pars), 1);
+	if (get_args(ac, ar, pars))
+		return (free(pars), 1);
 	get_args(ac, ar, pars);
 	init_forks(pars);
 	init_philos(pars);

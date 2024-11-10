@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 12:03:46 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:35:23 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,10 @@ int	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-int	ft_isalpha(int c)
-{
-	if (c <= 'a' && c <= 'z')
-		return (1);
-	return (0);
-}
-
-int	ft_isnum(int c)
-{
-	if (c <= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
 short int	check_num(t_init *p)
 {
-	if (p->tt_sleep <= 0 || p->tt_eat <= 0 || p->tt_die <= 0
-			|| p->n_philo <= 0 || p->n_philo > 200)
+	if (p->tt_sleep <= 0 || p->tt_eat <= 0 || p->tt_die <= 0 || p->n_philo <= 0
+		|| p->n_philo > 200)
 		return (1);
 	return (0);
 }
@@ -65,22 +51,17 @@ short int	check_syntax(int ac, char **ar)
 	int	i;
 	int	j;
 
-	i = 0;
+	i = 1;
 	while (i < ac)
 	{
 		j = 0;
 		while (ar[i][j])
 		{
 			if (ft_isalpha(ar[i][j]))
-			{
-				printf("Syntax Error\n");
 				return (1);
-			}
-			else if (ft_isnum(ar[i][j]) && !ft_isnum(ar[i][j + 1]))
-			{
-				printf("Syntax Error\n");
+			else if (ft_isnum(ar[i][j]) && ar[i][j + 1] && !ft_isnum(ar[i][j
+						+ 1]))
 				return (1);
-			}
 			++j;
 		}
 		++i;
@@ -92,11 +73,11 @@ short int	get_args(int ac, char **ar, t_init *pars)
 {
 	int	i;
 
-	if ((ac < 5 || ac > 6) || check_num(pars) || check_syntax(ac, ar))
+	if ((ac < 4 && ac < 7) || check_syntax(ac, ar))
 	{
-	    printf("Invalid Use Try Valid Arguments:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
+		printf("Invalid Use Try Valid Arguments:\n./philosophers [number_of_philosophers] [time_to_die] [time_to_eat] \
 		[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
-	    return (0);
+		return (1);
 	}
 	i = 1;
 	pars->n_eat = -1;
@@ -114,7 +95,7 @@ short int	get_args(int ac, char **ar, t_init *pars)
 		else if (i == 6)
 			pars->n_eat = ft_atoi(ar[i - 1]);
 	}
-	return (1);
+	return (0);
 }
 
 void	init_forks(t_init *pars)

@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 12:04:28 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:23:25 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@ int	is_dead(t_init *p)
 	if (p->is_dead == 1)
 		return (pthread_mutex_unlock(&p->dead_flag), 1);
 	return (pthread_mutex_unlock(&p->dead_flag), 0);
-}
-
-size_t	get_time(void)
-{
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday()failed\n", 22);
-	return ((time.tv_sec * 1000 + time.tv_usec / 1000));
 }
 
 void	ft_sleep(long time, t_init *s)

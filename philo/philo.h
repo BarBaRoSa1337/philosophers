@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/08 11:55:41 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:25:03 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,19 @@ typedef struct s_philo
 	pthread_t			tread;
 }						t_philo;
 
-void					init_forks(t_init *pars);
+void					print_msg(char *str, int index, t_init *init);
 short int				get_args(int ac, char **ar, t_init *pars);
-void					unlock_the_fork(t_philo *philas);
 int						lock_the_fork(t_philo *philas, int index);
 int						ft_sleeping(int index, t_init *pars);
 int						ft_eating(int index, t_init *pars);
+void					unlock_the_fork(t_philo *philas);
 void					ft_sleep(long time, t_init *s);
+void					init_forks(t_init *pars);
 int						ft_atoi(const char *str);
 void					life_guarde(t_init *p);
 int						is_dead(t_init *p);
-void					print_msg(char *str, int index, t_init *init);
+int						ft_isalpha(int c);
+int						ft_isnum(int c);
 size_t					get_time(void);
 
 #endif
