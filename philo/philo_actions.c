@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 11:13:03 by achakour          #+#    #+#             */
-/*   Updated: 2024/10/15 15:10:54 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:04:04 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,25 @@ void	set_eat(t_philo *p)
 	pthread_mutex_lock(&p->l9ess);
 	p->meals++;
 	p->last_eated = get_time();
-	if (p->meals != -1 && p->meals == p->init->n_eat)
-		p->init->nbr_eating++;
 	pthread_mutex_unlock(&p->l9ess);
 }
 
 int	ft_eating(int index, t_init *pars)
 {
 	t_philo	**philo;
+	t_init	*p;
 
+	p = pars;
 	philo = pars->philos;
 	if (lock_the_fork(philo[index], index))
 		return (1);
 	set_eat(philo[index]);
 	print_msg("is eating", index, pars);
 	ft_sleep(pars->tt_eat, pars);
+	pthread_mutex_lock(&pars->eat_check);
+	if (philo[index]->meals != -1 && philo[index]->meals == p->n_eat)
+		p->nbr_eating++;
+	pthread_mutex_unlock(&pars->eat_check);
 	unlock_the_fork(philo[index]);
 	return (0);
 }

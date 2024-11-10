@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/10/15 15:11:40 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:55:41 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_init
 	long				n_eat;
 	int					nbr_eating;
 	t_philo				**philos;
+	pthread_mutex_t		eat_check;	
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		dead_flag;
 	pthread_mutex_t		msg;

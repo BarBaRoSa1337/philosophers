@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/10/15 15:12:32 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:04:28 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ void	ft_sleep(long time, t_init *s)
 		;
 }
 
+void	eat_check(t_init *pars)
+{
+	t_init	*p;
+
+	p = pars;
+	pthread_mutex_lock(&p->dead_flag);
+	pthread_mutex_lock(&p->eat_check);
+	if (p->nbr_eating == p->n_philo)
+		p->is_dead = 1;
+	pthread_mutex_unlock(&p->eat_check);
+	pthread_mutex_unlock(&p->dead_flag);
+}
+
 void	life_guarde(t_init *p)
 {
 	int	i;
@@ -58,10 +71,7 @@ void	life_guarde(t_init *p)
 				pthread_mutex_unlock(&p->philos[i]->l9ess);
 				break ;
 			}
-			pthread_mutex_lock(&p->dead_flag);
-			if (p->nbr_eating == p->n_philo)
-				p->is_dead = 1;
-			pthread_mutex_unlock(&p->dead_flag);
+			eat_check(p);
 			pthread_mutex_unlock(&p->philos[i]->l9ess);
 		}
 		if (is_dead(p))
