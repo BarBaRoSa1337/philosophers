@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:48:32 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 14:41:02 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/16 14:53:16 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	ft_atoi(const char *str)
 
 short int	check_num(t_init *p)
 {
-	if (p->tt_sleep <= 0 || p->tt_eat <= 0 || p->tt_die <= 0 || p->n_philo <= 0
-		|| p->n_philo > 200)
+	if (p->tt_sleep <= 0 || p->tt_eat <= 0 || p->tt_die <= 0 || p->n_philo <= 0)
 		return (1);
 	else if (p->n_eat != -1 && p->n_eat <= 0)
 		return (1);
@@ -107,10 +106,13 @@ void	init_forks(t_init *pars)
 
 	i = 0;
 	n_philo = pars->n_philo;
-	pthread_mutex_init(&pars->msg, NULL);
-	pthread_mutex_init(&pars->dead_flag, NULL);
 	pars->forks = NULL;
+	pthread_mutex_init(&pars->msg, NULL);
+	pthread_mutex_init(&pars->eat_check, NULL);
+	pthread_mutex_init(&pars->dead_flag, NULL);
 	pars->forks = malloc(sizeof(pthread_mutex_t) * n_philo);
+	if (!pars->forks)
+		return ;
 	while (i < n_philo)
 	{
 		pthread_mutex_init(&pars->forks[i], NULL);

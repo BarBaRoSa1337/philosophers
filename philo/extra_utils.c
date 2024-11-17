@@ -6,11 +6,21 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 12:22:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 15:00:23 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/17 09:51:20 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	print_dead(char *str, int index, t_init *init)
+{
+	t_init	*p;
+
+	p = init;
+	pthread_mutex_lock(&p->msg);
+	printf("%zu %d %s\n", get_time() - p->t_start, index + 1, str);
+	pthread_mutex_unlock(&p->msg);
+}
 
 void	free_all(t_init *init)
 {

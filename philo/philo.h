@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 09:26:47 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 14:56:19 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/17 09:55:40 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,37 @@ typedef struct s_philo	t_philo;
 
 typedef struct s_init
 {
+	int					nbr_eating;
 	long				tt_sleep;
 	long				n_philo;
-	long				tt_die;
 	long				tt_eat;
+	long				tt_die;
 	long				n_eat;
-	int					nbr_eating;
 	t_philo				**philos;
 	pthread_mutex_t		eat_check;	
-	pthread_mutex_t		*forks;
 	pthread_mutex_t		dead_flag;
+	ssize_t				t_start;
+	pthread_mutex_t		*forks;
 	pthread_mutex_t		msg;
 	int					is_dead;
-	ssize_t				t_start;
 }						t_init;
 
 typedef struct s_philo
 {
-	pthread_mutex_t		*r_forchit;
-	pthread_mutex_t		*l_forchit;
-	t_init				*init;
-	long				last_eated;
 	int					index;
 	int					meals;
-	pthread_mutex_t		l9ess;
 	pthread_t			tread;
+	t_init				*init;
+	pthread_mutex_t		l9ess;
+	pthread_mutex_t		*r_forchit;
+	pthread_mutex_t		*l_forchit;
+	long				last_eated;
 }						t_philo;
 
+void					print_dead(char *str, int index, t_init *init);
 void					print_msg(char *str, int index, t_init *init);
-short int				get_args(int ac, char **ar, t_init *pars);
 int						lock_the_fork(t_philo *philas, int index);
+short int				get_args(int ac, char **ar, t_init *pars);
 int						ft_sleeping(int index, t_init *pars);
 int						ft_eating(int index, t_init *pars);
 void					unlock_the_fork(t_philo *philas);

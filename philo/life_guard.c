@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:56:59 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/10 12:23:25 by achakour         ###   ########.fr       */
+/*   Updated: 2024/11/17 10:15:11 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	life_guarde(t_init *p)
 				pthread_mutex_lock(&p->dead_flag);
 				p->is_dead = 1;
 				pthread_mutex_unlock(&p->dead_flag);
-				printf("%zu %d is dead\n", get_time() - p->t_start, i + 1);
+				print_dead("is dead", i, p);
 				pthread_mutex_unlock(&p->philos[i]->l9ess);
 				break ;
 			}
